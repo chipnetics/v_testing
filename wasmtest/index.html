@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Wasm testing</title>
+</head>
+<body>
+
+<script src="main.js"></script>
+<input type = "button" onclick = "js_main()" value = "Display"> 
+
+
+<br><br>File input test...<br>
+<input type="file" id="input"/>
+
+<script>
+    var reader = new FileReader();
+    const fileByteArray = [];
+
+    input.addEventListener('change', (e) => {
+    reader.readAsArrayBuffer(e.target.files[0]);
+    reader.onloadend = (evt) => {
+    if (evt.target.readyState === FileReader.DONE) {
+        const arrayBuffer = evt.target.result,
+            array = new Uint8Array(arrayBuffer);
+        for (const a of array) {
+            fileByteArray.push(a);
+        }
+
+        main__do_something(fileByteArray)
+        console.log(fileByteArray)
+        }
+    }
+    })
+</script>
+
+</body>
+</html>
