@@ -11,28 +11,27 @@
 
 
 <br><br>File input test...<br>
-<input type="file" id="input"/>
-
 <script>
-    var reader = new FileReader();
-    const fileByteArray = [];
+    var openFile = function(event) {
+      var input = event.target;
 
-    input.addEventListener('change', (e) => {
-    reader.readAsArrayBuffer(e.target.files[0]);
-    reader.onloadend = (evt) => {
-    if (evt.target.readyState === FileReader.DONE) {
-        const arrayBuffer = evt.target.result,
-            array = new Uint8Array(arrayBuffer);
-        for (const a of array) {
-            fileByteArray.push(a);
-        }
+      var reader = new FileReader();
+      reader.onload = function(){
+        var text = reader.result;
+        var node = document.getElementById('output');
+        //node.innerText = text;
+        //console.log(reader.result.substring(0, 200));
+        main__do_something(new string(text))
+      };
+      reader.readAsText(input.files[0]);
+    };
 
-        main__do_something(fileByteArray)
-        console.log(fileByteArray)
-        }
-    }
-    })
-</script>
+   
+  </script>
+  </head>
+  <body>
+  <input type='file' accept='text/plain' onchange='openFile(event)'><br>
+  <div id='output'>
 
 </body>
 </html>

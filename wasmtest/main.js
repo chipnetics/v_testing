@@ -44,8 +44,8 @@ function compare_RepIndex_by_idx(a,b) {
 	else return 1;
 }
 
-// V_COMMIT_HASH dce2173
-// V_CURRENT_COMMIT_HASH 7aca67f
+// V_COMMIT_HASH a83ac94
+// V_CURRENT_COMMIT_HASH a83ac94
 
 let wasmExportObject;
 const loadRoutine = async () => {
@@ -153,14 +153,12 @@ function strings__new_builder(initial_size) {
 	}
 }
 
-/* [deprecated] */
 /**
  * @function
- * @deprecated
- * @param {u8} data
+ * @param {byte} data
  * @returns {void}
 */
-function strings__Builder_write_b(b, data) {
+function strings__Builder_write_byte(b, data) {
 b = new $ref(b)
 	try {
 		array_push(b.valueOf(),data,false);
@@ -172,13 +170,13 @@ b = new $ref(b)
 
 /**
  * @function
- * @param {byte} data
  * @returns {void}
 */
-function strings__Builder_write_byte(b, data) {
+function strings__Builder_clear(b) {
 b = new $ref(b)
 	try {
-		array_push(b.valueOf(),data,false);
+		/** @type {strings__Builder} */
+		b.val = new array(new array_buffer({arr: [], len: new int(0), cap: new int(0)})).val;
 	} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
 		throw e;
@@ -209,11 +207,11 @@ function strings__Builder_write(b, data) {
 b = new $ref(b)
 	try {
 		if ((new bool(data.len.valueOf() == new int(0).valueOf())).valueOf()) {
-			const _tmp1 = new Option({});
+			const _tmp1 = new _option({});
 			_tmp1.state = new u8(0);_tmp1.data = new int(0)
 			return _tmp1;}
 		array_push(b.valueOf(),data.arr.arr,true);
-		const _tmp2 = new Option({});
+		const _tmp2 = new _option({});
 		_tmp2.state = new u8(0);_tmp2.data = data.len
 		return _tmp2;} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
@@ -2588,6 +2586,46 @@ Option.prototype = {
  * @returns {string}
 */
 function Option_str(o) {
+	try {
+		if ((new bool(o.state.valueOf() == new int(0).valueOf())).valueOf()) {
+			return new string("Option{ ok }");
+		}
+		if ((new bool(o.state.valueOf() == new int(1).valueOf())).valueOf()) {
+			return new string("Option{ none }");
+		}
+		return new string(`Option{ error: "${IError_str(o.err)}" }`);
+	} catch (e) { 
+		if (e instanceof ReturnException) { return e.val; } 
+		throw e;
+	}
+}
+
+/**
+ * @constructor
+ * @param {{state?: u8, err?: IError}} init
+*/
+function _option({ state = new u8(0), err = none__ }) {
+	this.state = state
+	this.err = err
+};
+_option.prototype = {
+	...Object.prototype,
+	...Any.prototype,
+	toString() {
+		return `_option { state: ${this["state"].toString()} , err: ${this["err"].toString()} }`
+	},
+	/** @type {u8} */
+	state: new u8(0),
+	/** @type {IError} */
+	err: undefined,
+	$toJS() { return this; }
+	};
+
+/**
+ * @function
+ * @returns {string}
+*/
+function _option_str(o) {
 	try {
 		if ((new bool(o.state.valueOf() == new int(0).valueOf())).valueOf()) {
 			return new string("Option{ ok }");
@@ -5203,7 +5241,7 @@ function string_last_index(s, p) {
 		if ((new bool(idx.valueOf() == new int(-1).valueOf())).valueOf()) {
 			return new Option({ state:  new u8(2),err: none__});
 		}
-		const _tmp29 = new Option({});
+		const _tmp29 = new _option({});
 		_tmp29.state = new u8(0);_tmp29.data = idx
 		return _tmp29;} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
@@ -5629,7 +5667,7 @@ function string_index(s, search) {
 		if ((new bool(res.valueOf() == new int(-1).valueOf())).valueOf()) {
 			return new Option({ state:  new u8(2),err: none__});
 		}
-		const _tmp30 = new Option({});
+		const _tmp30 = new _option({});
 		_tmp30.state = new u8(0);_tmp30.data = res
 		return _tmp30;} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
@@ -5756,7 +5794,6 @@ function utf8_char_len(b) {
 /* program entry point */
 async function js_main() {
 	try {
-		builtin__println (new string("hello"));
 	} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
 		throw e;
@@ -5770,12 +5807,62 @@ async function js_main() {
 */
 function main__do_something(mydata) {
 	try {
+		builtin__println (new string("Uploaded:"));
 		builtin__println (mydata);
+		/** @type {Array_string} */
+		const line_broke = string_split(mydata,new string("\n"));
+		/** @type {Array_main__Data} */
+		let data_arr = new array(new array_buffer({arr: [], len: new int(0), cap: new int(0)}));
+		for (const lines of line_broke) {
+			try { 
+				/** @type {Array_string} */
+				const str_array = string_split(lines,new string("\t"));
+				/** @type {main__Data} */
+				let a_data = new main__Data({});
+				/** @type {string} */
+				a_data.name = new string(str_array.arr.get(new int(new int(0).valueOf())));
+				/** @type {int} */
+				a_data.price = new int(string_int(str_array.arr.get(new int(new int(2).valueOf())),));
+				array_push(data_arr,a_data,false);
+			} catch (e) {
+			 if (e instanceof BreakException) { break; }
+			 else if (e instanceof ContinueException) { continue; }
+			 else { throw e; } }
+		}
+		
+		for (const elem of data_arr) {
+			try { 
+				builtin__println (new string(`${elem.name}\t${int_str(new int( elem.price.valueOf() * new int(100).valueOf()))}`));
+			} catch (e) {
+			 if (e instanceof BreakException) { break; }
+			 else if (e instanceof ContinueException) { continue; }
+			 else { throw e; } }
+		}
+		
 	} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
 		throw e;
 	}
 }
+
+/**
+ * @constructor
+ * @param {{name?: string, price?: int}} init
+*/
+function main__Data({ name = new string(""), price = new int(0) }) {
+	this.name = name
+	this.price = price
+};
+main__Data.prototype = {
+	toString() {
+		return `main__Data { name: "${this["name"].toString()}", price: ${this["price"].toString()} }`
+	},
+	/** @type {string} */
+	name: new string(""),
+	/** @type {int} */
+	price: new int(0),
+	$toJS() { return this; }
+	};
 
 None__.prototype.msg = function() {
 	return IError_msg(this)
