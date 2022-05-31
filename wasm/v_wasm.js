@@ -1,4 +1,4 @@
-export const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
+const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
     let response = undefined;
   
     if (!importObject) {
@@ -40,12 +40,15 @@ export const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
 
     document.body.textContent = `function result: ${funcResult[0]}`;
   };
- runWasmAdd();
+ //runWasmAdd();
 
-
+function my_lil_wasm(s)
+{
  const runWasmAdd2 = async () => {
       
     const wasmModule = await wasmBrowserInstantiate("./main.wasm");
+
+    const length = s.length
 
     const { main__some_pointer_function, memory } = wasmModule.instance.exports
 
@@ -53,9 +56,46 @@ export const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
   
     main__some_pointer_function(result)
     
+    console.log(s)
+    console.log(length)
     console.log(result)
-    document.body.textContent = `function result: ${result.join(", ")}`;
+    //document.body.textContent = `function result: ${result.join(", ")}`;
   };
- runWasmAdd2();
+  
+  runWasmAdd2();
+}
+
+function my_other_lil_wasm(s)
+{
+ const runWasmAdd3 = async () => {
+      
+    const wasmModule = await wasmBrowserInstantiate("./main.wasm");
+    const { main__some_other_pointer_function, memory } = wasmModule.instance.exports
+
+    const length = s.length
+    let offset = 0 
+
+    var enc = new TextEncoder(); // always utf-8
+    const input = new Int32Array(memory.buffer, offset, length)
+    input.set(enc.encode(s))
+    //input.set([97, 98, 3, 4, 5])
+
+    offset += length * Int32Array.BYTES_PER_ELEMENT
+    console.log("Offset is " + offset)
+    const result = new Int32Array(memory.buffer, offset, length)
+  
+    main__some_other_pointer_function(input.byteOffset,result.byteOffset,length)
+    
+    console.log(s)
+    console.log(Array.from(s))
+    console.log("uploaded data length is " + length)
+    console.log(input)
+    console.log("result data is " + result)
+    //document.body.textContent = `function result: ${result.join(", ")}`;
+  };
+  
+  runWasmAdd3();
+}
+
 
 

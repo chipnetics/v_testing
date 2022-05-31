@@ -2,11 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Wasm testing</title>
+    <title>WASM testing with V</title>
 </head>
 <body>
 
-  <script type="module" src="v_wasm.js"></script>
+<script type="text/javascript" src="v_wasm.js"></script>
+<script>
+  var openFile = function(event) {
+    var input = event.target;
+
+    var reader = new FileReader();
+    reader.onload = function(){
+    
+    var text = reader.result;
+    var node = document.getElementById('output');
+    my_other_lil_wasm(new String(text));
+
+    };
+    
+    
+    reader.readAsText(input.files[0]);
+  };
+  </script>
+
+  <input type='file' accept='text/plain' onchange='openFile(event)'><br>
+  <div id='output'>
 
 </body>
 </html>

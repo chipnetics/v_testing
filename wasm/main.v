@@ -53,6 +53,17 @@ fn some_pointer_function(mut a_array &int)  {
 }
 
 [wasm_export: 'main.wasm']
+fn some_other_pointer_function( input_array &int, mut res_array &int, length int)  {
+   
+   mut local_arr := []int{}
+
+   for i:= 0; i< length; i++
+    {
+        res_array[i] = unsafe{input_array[i]+1}
+    }
+}
+
+[wasm_export: 'main.wasm']
 fn do_something(mydata string) {
 
     println("Uploaded:")
