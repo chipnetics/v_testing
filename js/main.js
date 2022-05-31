@@ -45,7 +45,7 @@ function compare_RepIndex_by_idx(a,b) {
 }
 
 // V_COMMIT_HASH a83ac94
-// V_CURRENT_COMMIT_HASH 928dafe
+// V_CURRENT_COMMIT_HASH 84e375e
 
 let wasmExportObject;
 const loadRoutine = async () => {
@@ -4300,7 +4300,11 @@ function string_hash(s) {
 */
 function string_int(s) {
 	try {
-		return new int(parseInt(s.str));
+		/** @type {int} */
+		const res = new int(new int(0));
+		if (typeof(s) == "string") { res.val = parseInt(s) }
+		else { res.val = parseInt(s.str) }
+		return res;
 	} catch (e) { 
 		if (e instanceof ReturnException) { return e.val; } 
 		throw e;
