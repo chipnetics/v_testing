@@ -45,7 +45,7 @@ function compare_RepIndex_by_idx(a,b) {
 }
 
 // V_COMMIT_HASH a83ac94
-// V_CURRENT_COMMIT_HASH a83ac94
+// V_CURRENT_COMMIT_HASH 928dafe
 
 let wasmExportObject;
 const loadRoutine = async () => {
@@ -5811,6 +5811,7 @@ function main__do_something(mydata) {
 		builtin__println (mydata);
 		/** @type {Array_string} */
 		const line_broke = string_split(mydata,new string("\n"));
+		builtin__println (new string(`Number of Lines: ${int_str(line_broke.len)}`));
 		/** @type {Array_main__Data} */
 		let data_arr = new array(new array_buffer({arr: [], len: new int(0), cap: new int(0)}));
 		for (const lines of line_broke) {

@@ -4,7 +4,12 @@
 // 
 // JS COMPILE
 // v -b js_browser main.v
+//import os
 fn main() {
+
+    //my_lines := os.read_lines("input.txt") or {panic(err)}
+    //join_lines := my_lines.join_lines()
+    //do_something(join_lines)
   
 }
 
@@ -14,6 +19,8 @@ fn do_something(mydata string) {
     println(mydata)
 
    line_broke := mydata.split("\n")
+
+   println("Number of Lines: $line_broke.len")
 
    mut data_arr := []Data{}
 
@@ -25,7 +32,7 @@ fn do_something(mydata string) {
        a_data.name = str_array[0]
        a_data.price = str_array[2].int()
 
-        data_arr << a_data
+       data_arr << a_data
    }
 
    for elem in data_arr {
