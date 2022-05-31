@@ -89,7 +89,7 @@ function my_other_lil_wasm(s)
     console.log(s)
     console.log(Array.from(s))
     console.log("uploaded data length is " + length)
-    console.log(input)
+    console.log("input data is " + input)
     console.log("result data is " + result)
     //document.body.textContent = `function result: ${result.join(", ")}`;
   };
