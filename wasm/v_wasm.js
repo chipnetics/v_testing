@@ -31,7 +31,7 @@ const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
     return response;
   };
 
-async function my_other_lil_wasm(s)
+function my_other_lil_wasm(s)
 {
  const runWasmAdd3 = async () => {
       
@@ -62,8 +62,7 @@ async function my_other_lil_wasm(s)
     return result
   };
   
-  const my_res = await runWasmAdd3();
-
+  const my_res = runWasmAdd3();
   return my_res
 }
 

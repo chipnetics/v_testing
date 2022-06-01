@@ -6,28 +6,24 @@
 </head>
 <body>
 
-  
 <script type="text/javascript" src="v_wasm.js"></script>
 <script>
   var openFile = function(event) {
     var input = event.target;
 
     var reader = new FileReader();
-    reader.onload = function(){
+    reader.onload = async function(){
     
     var text = reader.result;
     var node = document.getElementById('output');
-    var trans_result = my_other_lil_wasm(new String(text));
+    var trans_result = await my_other_lil_wasm(new String(text));
     
-    console.log("trans_result" + trans_result);
-    };
-    
-    
-    reader.readAsText(input.files[0]);
+    console.log("trans_result " + trans_result);
 
     // Save results...
     (function () {
-    var textFile = null,
+      var textFile = null;
+      
       makeTextFile = function (text) {
         var data = new Blob([text], {type: 'text/plain'});
     
@@ -42,18 +38,17 @@
         return textFile;
       };
 
-      var create = document.getElementById('create');
-    
+      var create = document.getElementById('create'); 
+      
       create.addEventListener('click', function () {
         var link = document.getElementById('downloadlink');
-        //link.href = makeTextFile(textbox.value);
-        link.href = makeTextFile("this is more text");
+        link.href = makeTextFile(new String(trans_result));
         link.style.display = 'block';
       }, false);
     })();
-
-
-
+    };
+    
+    reader.readAsText(input.files[0]);
   };
 </script>
 
