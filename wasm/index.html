@@ -6,6 +6,7 @@
 </head>
 <body>
 
+  
 <script type="text/javascript" src="v_wasm.js"></script>
 <script>
   var openFile = function(event) {
@@ -16,17 +17,56 @@
     
     var text = reader.result;
     var node = document.getElementById('output');
-    my_other_lil_wasm(new String(text));
-
+    var trans_result = my_other_lil_wasm(new String(text));
+    
+    console.log("trans_result" + trans_result);
     };
     
     
     reader.readAsText(input.files[0]);
-  };
-  </script>
 
-  <input type='file' accept='text/plain' onchange='openFile(event)'><br>
-  <div id='output'>
+    // Save results...
+    (function () {
+    var textFile = null,
+      makeTextFile = function (text) {
+        var data = new Blob([text], {type: 'text/plain'});
+    
+        // If we are replacing a previously generated file we need to
+        // manually revoke the object URL to avoid memory leaks.
+        if (textFile !== null) {
+          window.URL.revokeObjectURL(textFile);
+        }
+    
+        textFile = window.URL.createObjectURL(data);
+    
+        return textFile;
+      };
+
+      var create = document.getElementById('create');
+    
+      create.addEventListener('click', function () {
+        var link = document.getElementById('downloadlink');
+        //link.href = makeTextFile(textbox.value);
+        link.href = makeTextFile("this is more text");
+        link.style.display = 'block';
+      }, false);
+    })();
+
+
+
+  };
+</script>
+
+Upload a file for analysis:<br>
+<input type='file' accept='text/plain' onchange='openFile(event)'><br>
+  
+<div id='output'>
+
+
+  <br>Results:<br>
+  <button id="create">Generate download link</button>
+
+    <a download="info.txt" id="downloadlink" style="display: none">Download</a>
 
 </body>
 </html>

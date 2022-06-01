@@ -31,41 +31,7 @@ const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
     return response;
   };
 
-  const runWasmAdd = async () => {
-      
-    const wasmModule = await wasmBrowserInstantiate("./main.wasm");
-    const funcResult = new Int32Array(wasmModule.instance.exports.main__some_function());
-  
-    console.log(funcResult[0])
-
-    document.body.textContent = `function result: ${funcResult[0]}`;
-  };
- //runWasmAdd();
-
-function my_lil_wasm(s)
-{
- const runWasmAdd2 = async () => {
-      
-    const wasmModule = await wasmBrowserInstantiate("./main.wasm");
-
-    const length = s.length
-
-    const { main__some_pointer_function, memory } = wasmModule.instance.exports
-
-    const result = new Int32Array(memory.buffer, 0, 20)
-  
-    main__some_pointer_function(result)
-    
-    console.log(s)
-    console.log(length)
-    console.log(result)
-    //document.body.textContent = `function result: ${result.join(", ")}`;
-  };
-  
-  runWasmAdd2();
-}
-
-function my_other_lil_wasm(s)
+async function my_other_lil_wasm(s)
 {
  const runWasmAdd3 = async () => {
       
@@ -92,10 +58,16 @@ function my_other_lil_wasm(s)
     console.log("input data is " + input)
     console.log("result data is " + result)
     //document.body.textContent = `function result: ${result.join(", ")}`;
+
+    return result
   };
   
-  runWasmAdd3();
+  const my_res = await runWasmAdd3();
+
+  return my_res
 }
+
+
 
 
 

@@ -61,6 +61,12 @@ fn some_other_pointer_function( input_array &int, mut res_array &int, length int
 }
 
 [wasm_export: 'main.wasm']
+fn some_other_string_function( input_array &string, mut res_array &string, length int)  {
+   
+   res_array = input_array.clone()
+}
+
+[wasm_export: 'main.wasm']
 fn do_something(mydata string) {
 
     println("Uploaded:")
